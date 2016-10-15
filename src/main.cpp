@@ -4,7 +4,7 @@
 int main(int argc, char **argv) {
     try  {
         tnt::Tntnet app;
-        app.listen(8000);
+        app.listen(8080);
         app.mapUrl("^/$", "mainpage");
         app.mapUrl("^/([^.]+)(\\..+)?", "$1");
         app.run();

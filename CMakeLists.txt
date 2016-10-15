@@ -10,7 +10,9 @@ add_definitions(-std=c++11)
 
 
 set(ECPP_FILES src/mainpage.ecpp)
-SET(SOURCE_FILES src/main.cpp)
+SET(SOURCE_FILES src/main.cpp )
+
+configure_file(log.xml ${CMAKE_CURRENT_BINARY_DIR}/log.xml COPYONLY)
 
 foreach(comp ${ECPP_FILES})
     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${comp}.cpp

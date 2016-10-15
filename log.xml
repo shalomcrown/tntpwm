@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  sample logging-properties for application tntpwm
+  put this in tntpwm.properties and use:
+    log_init("tntpwm.properties");
+  in your application to initialize logging
+
+  define categories with:
+    log_define("some.category")
+  this defines a static function, so you must put it outside other functions.
+  you can define a category per file or a category per namespace.
+
+  print logging-messages with:
+    log_fatal("some fatal message");
+    log_error("some error message");
+    log_warn("some warn message");
+    log_info("some info message");
+    log_debug("some debug message");
+
+-->
+<logging>
+  <rootlogger>DEBUG</rootlogger>
+  <loggers>
+    <logger>
+      <category>tntpwm</category>
+      <level>DEBUG</level>
+    </logger>
+  </loggers>
+  <!-- <file>tntpwm.log</file> -->      <!--uncomment if you want to log to a file -->
+  <!-- <maxfilesize>1MB</maxfilesize> -->
+  <!-- <maxbackupindex>2</maxbackupindex> -->
+  <!-- <host>localhost:1234</host> --> <!--  # send log-messages with udp -->
+</logging>

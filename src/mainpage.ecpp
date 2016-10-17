@@ -1,9 +1,25 @@
+<%pre>
+int sliderValue = 0;
+</%pre>
+
+<!doctype html>
 <html>
     <head>
-        <title>ecpp application myfirstproject</title>
+        <title>TNTPWM</title>
+
+    <script>
+        function sendValue() {
+            value = document.getElementById("slider").value
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET", "changeValue?value=" + value, false);
+            xmlhttp.send(null);
+
+        }
+    </script>
+
     </head>
     <body>
-        <h1>myfirstproject</h1>
-        <img src="picture.jpg">
+        <h1>Welcome to TNTPWM</h1>
+        <input type="range" min="0" max="100" name="slider" id="slider" value="<$ sliderValue $>" onchange="sendValue();"/>
     </body>
 </html>

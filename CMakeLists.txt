@@ -9,7 +9,7 @@ add_subdirectory(Modules)
 add_definitions(-std=c++11)
 
 
-set(ECPP_FILES src/mainpage.ecpp)
+set(ECPP_FILES src/mainpage.ecpp src/changeValue.ecpp)
 SET(SOURCE_FILES src/main.cpp )
 
 configure_file(log.xml ${CMAKE_CURRENT_BINARY_DIR}/log.xml COPYONLY)

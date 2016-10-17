@@ -1,0 +1,13 @@
+<%pre>
+extern int sliderValue;
+</%pre>
+
+<%args>
+int value;
+</%args>
+
+<%cpp>
+    sliderValue = value;
+
+    log_info("Set value:" << value);
+</%cpp>

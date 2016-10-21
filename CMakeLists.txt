@@ -17,7 +17,6 @@ configure_file(log.xml ${CMAKE_CURRENT_BINARY_DIR}/log.xml COPYONLY)
 
 foreach(comp ${ECPP_FILES})
     get_filename_component(comp_name ${comp} NAME_WE)
-    get_filename_component(comp_dir ${comp} DIRECTORY)
 
     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${comp}.cpp
         COMMAND ecppc -o ${CMAKE_CURRENT_BINARY_DIR}/${comp}.cpp -v -n ${comp_name} ${CMAKE_CURRENT_SOURCE_DIR}/${comp}

@@ -1,6 +1,6 @@
 
 # Look for the header file.
-FIND_PATH(WIRINGPI_INCLUDE_DIR NAMES softPWM.h)
+FIND_PATH(WIRINGPI_INCLUDE_DIR NAMES softPwm.h)
 
 # Look for the library.
 FIND_LIBRARY(WIRINGPI_LIBRARY NAMES WIRINGPI wiringPi)

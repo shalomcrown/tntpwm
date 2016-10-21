@@ -11,7 +11,7 @@ int sliderValue = 0;
         function sendValue() {
             value = document.getElementById("slider").value
             xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("GET", "changeValue?value=" + value, false);
+            xmlhttp.open("GET", "changeValue?value=" + value, true);
             xmlhttp.send(null);
 
         }

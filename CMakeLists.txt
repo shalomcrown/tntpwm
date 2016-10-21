@@ -3,6 +3,7 @@ project(tntpwm)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/Modules/")
 
 find_package(TNTNET REQUIRED)
+find_package(WIRINGPI REQUIRED)
 
 add_subdirectory(src)
 add_subdirectory(Modules)
@@ -31,7 +32,7 @@ endforeach()
 add_executable(tntpwm ${SOURCE_FILES} )
 
 target_include_directories(tntpwm PRIVATE ${TNTNET_INCLUDE_DIRS})
-target_link_libraries(tntpwm ${TNTNET_LIBRARIES})
+target_link_libraries(tntpwm ${TNTNET_LIBRARIES} ${WIRINNGPI_LIBRARIES})
 
 
 install(TARGETS tntpwm RUNTIME DESTINATION bin)

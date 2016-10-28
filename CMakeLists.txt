@@ -31,7 +31,7 @@ endforeach()
 add_executable(tntpwm ${SOURCE_FILES} )
 
 target_include_directories(tntpwm PRIVATE ${TNTNET_INCLUDE_DIRS})
-target_link_libraries(tntpwm ${TNTNET_LIBRARIES} ${WIRINNGPI_LIBRARIES})
+target_link_libraries(tntpwm ${TNTNET_LIBRARIES} ${WIRINGPI_LIBRARIES})
 
 
 install(TARGETS tntpwm RUNTIME DESTINATION bin)

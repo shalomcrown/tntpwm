@@ -1,5 +1,22 @@
 <%pre>
+#include <wiringPi.h>
+
 extern int sliderValue;
+bool initialized = false;
+
+
+void init() {
+
+    if (initialized) {
+        return;
+    }
+
+    wiringPiSetup();
+    pinMode (1, PWM_OUTPUT);
+    pwmWrite(1, sliderValue);
+    initialized = true;
+}
+
 </%pre>
 
 <%args>
@@ -8,6 +25,8 @@ int value;
 
 <%cpp>
     sliderValue = value;
-
+    init();
     log_info("Set value:" << value);
+    pwmWrite(1, sliderValue);
+
 </%cpp>

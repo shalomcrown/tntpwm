@@ -31,4 +31,5 @@ class Baro {
 
     private:
         int fd;
+	uint8_t calibration[22];
 };

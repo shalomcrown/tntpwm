@@ -25,17 +25,24 @@
 #include <iostream>
 #include <wiringPiI2C.h>
 #include <cxxtools/log.h>
-
+#include <tnt/tntnet.h>
 #include "baro-bmp180.hpp"
 
 #define DEVICE_ADDRESS 0x77
+
+log_define("baro")
 
 
 Baro::Baro() {
     fd = wiringPiI2CSetup(DEVICE_ADDRESS);
 
     if (fd <= 0) {
-        log_error("Couldn't open I2C device")
+        log_error("Couldn't open I2C device");
+	return;
+    }
+
+    for (int calibIndex = 0; calibIndex < 22; calibIndex++) {
+	calibration[calibIndex] = wiringPiI2CReadReg8(fd, 0xAA + calibIndex);
     }
 
 }

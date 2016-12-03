@@ -26,10 +26,15 @@ class Baro {
         double pressure;
         double temperature;
 
+
         Baro();
         int measure();
 
+        int getFd();
+        uint8_t getCalibration(int index);
+        int getCalibrationSize();
+
     private:
         int fd;
-	uint8_t calibration[22];
+        uint8_t calibration[22];
 };

@@ -10,8 +10,12 @@ add_subdirectory(Modules)
 add_definitions(-std=c++11)
 
 
+file(GLOB HEADERS
+    src/*.h*
+)
+
 set(ECPP_FILES src/mainpage.ecpp src/changeValue.ecpp)
-SET(SOURCE_FILES src/main.cpp src/baro-bmp180.cpp )
+SET(SOURCE_FILES src/main.cpp src/baro-bmp180.cpp src/baro-bmp180.hpp )
 
 configure_file(log.xml ${CMAKE_CURRENT_BINARY_DIR}/log.xml COPYONLY)
 
@@ -19,7 +23,7 @@ foreach(comp ${ECPP_FILES})
     get_filename_component(comp_name ${comp} NAME_WE)
 
     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${comp}.cpp
-        COMMAND ecppc -o ${CMAKE_CURRENT_BINARY_DIR}/${comp}.cpp -v -n ${comp_name} ${CMAKE_CURRENT_SOURCE_DIR}/${comp}
+        COMMAND ecppc -I src -o ${CMAKE_CURRENT_BINARY_DIR}/${comp}.cpp -v -n ${comp_name} ${CMAKE_CURRENT_SOURCE_DIR}/${comp}
         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${comp})
 
     SET(SOURCE_FILES ${SOURCE_FILES} ${CMAKE_CURRENT_BINARY_DIR}/${comp}.cpp )

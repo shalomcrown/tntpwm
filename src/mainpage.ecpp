@@ -1,5 +1,9 @@
 <%pre>
+#include "baro-bmp180.hpp"
+
 int sliderValue = 0;
+Baro baro;
+
 </%pre>
 
 <!doctype html>
@@ -21,5 +25,10 @@ int sliderValue = 0;
     <body>
         <h1>Welcome to TNTPWM</h1>
         <input type="range" min="0" max="1024" name="slider" id="slider" value="<$ sliderValue $>" onchange="sendValue();"/>
+        <p>
+        % for (i = 0; i < baro.getCalibrationSize(); i++) {
+            <$ baro.getCalibration(i) $>,
+        % }
+        </p>
     </body>
 </html>

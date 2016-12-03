@@ -38,11 +38,22 @@ Baro::Baro() {
 
     if (fd <= 0) {
         log_error("Couldn't open I2C device");
-	return;
+    return;
     }
 
     for (int calibIndex = 0; calibIndex < 22; calibIndex++) {
-	calibration[calibIndex] = wiringPiI2CReadReg8(fd, 0xAA + calibIndex);
+    calibration[calibIndex] = wiringPiI2CReadReg8(fd, 0xAA + calibIndex);
     }
 
+}
+
+int Baro::getFd() {
+    return fd;
+}
+
+uint8_t Baro::getCalibration(int index) {
+    return calibration[index];
+}
+int Baro::getCalibrationSize() {
+    return sizeof(calibration);
 }

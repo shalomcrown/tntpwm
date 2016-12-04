@@ -31,9 +31,10 @@ int fieldCounter;
         <input type="range" min="0" max="1024" name="slider" id="slider" value="<$ sliderValue $>" onchange="sendValue();"/>
         <p>
 
-        % for (int fieldCounter = 0; fieldCounter < baro.getCalibrationSize(); fieldCounter++) {
-            <$ baro.getCalibration(fieldCounter) $>,
-        % }
+%       for (int i = 0; i < baro.getCalibrationSize(); i++)
+%       {
+            <$ baro.getCalibration(i) & 0xFF $>,
+%       }
         </p>
     </body>
 </html>

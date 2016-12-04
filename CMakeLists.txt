@@ -17,24 +17,25 @@ file(GLOB HEADERS
 set(ECPP_FILES src/mainpage.ecpp src/changeValue.ecpp)
 SET(SOURCE_FILES src/main.cpp src/baro-bmp180.cpp src/baro-bmp180.hpp )
 
-configure_file(log.xml ${CMAKE_CURRENT_BINARY_DIR}/log.xml COPYONLY)
+configure_file(log.xml ${CMAKE_CURRENT_SOURCE_DIR}/log.xml COPYONLY)
+configure_file(src/baro-bmp180.hpp ${CMAKE_CURRENT_BINARY_DIR}/src/baro-bmp180.hpp COPYONLY)
+
 
 foreach(comp ${ECPP_FILES})
     get_filename_component(comp_name ${comp} NAME_WE)
 
     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${comp}.cpp
         COMMAND ecppc -I src -o ${CMAKE_CURRENT_BINARY_DIR}/${comp}.cpp -v -n ${comp_name} ${CMAKE_CURRENT_SOURCE_DIR}/${comp}
-        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${comp})
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${comp} )
 
     SET(SOURCE_FILES ${SOURCE_FILES} ${CMAKE_CURRENT_BINARY_DIR}/${comp}.cpp )
-
 
 endforeach()
 
 
 add_executable(tntpwm ${SOURCE_FILES} )
 
-target_include_directories(tntpwm PRIVATE ${TNTNET_INCLUDE_DIRS})
+target_include_directories(tntpwm PRIVATE ${TNTNET_INCLUDE_DIRS} src )
 target_link_libraries(tntpwm ${TNTNET_LIBRARIES} ${WIRINGPI_LIBRARIES})
 
 

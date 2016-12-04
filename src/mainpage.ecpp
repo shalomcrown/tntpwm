@@ -6,6 +6,10 @@ Baro baro;
 
 </%pre>
 
+<%request>
+int fieldCounter;
+</%request>
+
 <!doctype html>
 <html>
     <head>
@@ -26,8 +30,9 @@ Baro baro;
         <h1>Welcome to TNTPWM</h1>
         <input type="range" min="0" max="1024" name="slider" id="slider" value="<$ sliderValue $>" onchange="sendValue();"/>
         <p>
-        % for (i = 0; i < baro.getCalibrationSize(); i++) {
-            <$ baro.getCalibration(i) $>,
+
+        % for (int fieldCounter = 0; fieldCounter < baro.getCalibrationSize(); fieldCounter++) {
+            <$ baro.getCalibration(fieldCounter) $>,
         % }
         </p>
     </body>

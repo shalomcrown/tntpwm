@@ -20,21 +20,31 @@
  *
  *
  */
+#if defined(BARO_BMP180_INCLUDED)
+#define BARO_BMP180_INCLUDED
+
+#include <cxxtools/thread.h>
 
 class Baro {
     public:
         double pressure;
         double temperature;
+        int     measurementPeriod = 1000;
 
 
         Baro();
-        int measure();
+        void measure();
 
         int getFd();
         uint8_t getCalibration(int index);
         int getCalibrationSize();
+        int getRawTemp();
 
     private:
         int fd;
         uint8_t calibration[22];
+        cxxtools:Thread readingThread;
+        int rawTemp;
 };
+
+#endif // BARO_BMP180_INCLUDED

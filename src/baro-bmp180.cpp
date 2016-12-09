@@ -25,15 +25,21 @@
 #include <iostream>
 #include <wiringPiI2C.h>
 #include <cxxtools/log.h>
+#include <cxxtools/thread.h>
 #include <tnt/tntnet.h>
 #include "baro-bmp180.hpp"
 
 #define DEVICE_ADDRESS 0x77
+#define RAW_TEMP_MSB 0xF6
+#define RAW_TEMP_LSB 0xF7
+#define RAW_TEMP_XL SB 0xF8
+
+
 
 log_define("baro")
 
 
-Baro::Baro() {
+Baro::Baro() : readingThread(cxxtools::callable(this, &Baro::measure)) {
     fd = wiringPiI2CSetup(DEVICE_ADDRESS);
 
     if (fd <= 0) {
@@ -43,9 +49,25 @@ Baro::Baro() {
 
     for (int calibIndex = 0; calibIndex < 22; calibIndex++) {
     calibration[calibIndex] = wiringPiI2CReadReg8(fd, 0xAA + calibIndex);
+
+    readingThread.start();
     }
+}
+
+//==========================================
+
+Baro::measure() {
+    wiringPiI2CWriteReg8(fd, 0xF4, 0x2e);
+
+    cxxtools::Thread::sleep(53);
+
+    rawTemp = (wiringPiI2CReadReg8(fd, 0xf6) << 8) + (wiringPiI2CReadReg8(fd, 0xf7) & 0xFF);
+
+    cxxtools::Thread::sleep(measurementPeriod);
 
 }
+
+//==========================================
 
 int Baro::getFd() {
     return fd;
@@ -57,3 +79,8 @@ uint8_t Baro::getCalibration(int index) {
 int Baro::getCalibrationSize() {
     return sizeof(calibration);
 }
+
+int Baro::getRawTemp() {
+    return rawTemp;
+}
+

@@ -16,6 +16,16 @@
       <target>$1@tntpwm</target>
       <url>^/([^.]+)(\..+)?</url>
     </mapping>
+
+    <mapping>
+        <target>rest@tntpwm</target>
+        <url>^/status/(.*)</url>
+        <method>^GET$</method>
+        <args>
+        <id>$1</id>
+        </args>
+    </mapping>
+
   </mappings>
 
   <!-- listen to a port (empty string means any local interface) -->

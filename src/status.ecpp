@@ -1,0 +1,15 @@
+<%pre>
+#include "baro-bmp180.hpp"
+
+extern volatile Baro baro;
+
+</%pre>
+
+
+<%args>
+int id;
+</%args>
+
+<%cpp>
+
+</%cpp>

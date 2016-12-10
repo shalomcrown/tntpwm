@@ -11,20 +11,24 @@
       <target>mainpage@tntpwm</target>
       <url>^/$</url>
     </mapping>
-    <!-- map /comp.* or /comp to comp@tntpwm -->
-    <mapping>
-      <target>$1@tntpwm</target>
-      <url>^/([^.]+)(\..+)?</url>
-    </mapping>
+
 
     <mapping>
-        <target>rest@tntpwm</target>
+        <target>status@tntpwm</target>
         <url>^/status/(.*)</url>
         <method>^GET$</method>
         <args>
         <id>$1</id>
         </args>
     </mapping>
+
+<!-- map /comp.* or /comp to comp@tntpwm -->
+    <mapping>
+      <target>$1@tntpwm</target>
+      <url>^/([^.]+)(\..+)?</url>
+    </mapping>
+
+
 
   </mappings>
 

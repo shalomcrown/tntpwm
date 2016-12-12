@@ -14,8 +14,8 @@ file(GLOB HEADERS
     src/*.h*
 )
 
-set(ECPP_FILES src/mainpage.ecpp src/changeValue.ecpp)
-SET(SOURCE_FILES src/main.cpp src/baro-bmp180.cpp src/baro-bmp180.hpp )
+set(ECPP_FILES src/mainpage.ecpp src/changeValue.ecpp src/status.ecpp )
+SET(SOURCE_FILES src/main.cpp src/baro-bmp180.cpp )
 
 configure_file(log.xml ${CMAKE_CURRENT_SOURCE_DIR}/log.xml COPYONLY)
 configure_file(src/baro-bmp180.hpp ${CMAKE_CURRENT_BINARY_DIR}/src/baro-bmp180.hpp COPYONLY)

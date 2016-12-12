@@ -20,16 +20,19 @@
  *
  *
  */
-#if defined(BARO_BMP180_INCLUDED)
-#define BARO_BMP180_INCLUDED
 
+#include <stdint.h>
+#include <thread>
 #include <cxxtools/thread.h>
+
+#if ! defined(BARO_BMP180_INCLUDED)
+#define BARO_BMP180_INCLUDED
 
 class Baro {
     public:
         double pressure;
         double temperature;
-        int     measurementPeriod = 1000;
+        int measurementPeriod;
 
 
         Baro();
@@ -43,8 +46,10 @@ class Baro {
     private:
         int fd;
         uint8_t calibration[22];
-        cxxtools:Thread readingThread;
+        std::thread readingThread;
         int rawTemp;
+
+        void measureLoop();
 };
 
 #endif // BARO_BMP180_INCLUDED

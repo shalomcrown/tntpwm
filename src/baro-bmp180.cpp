@@ -27,7 +27,9 @@
 #include <cxxtools/log.h>
 #include <cxxtools/thread.h>
 #include <tnt/tntnet.h>
+#include <thread>
 #include "baro-bmp180.hpp"
+
 
 #define DEVICE_ADDRESS 0x77
 #define RAW_TEMP_MSB 0xF6
@@ -39,24 +41,26 @@
 log_define("baro")
 
 
-Baro::Baro() : readingThread(cxxtools::callable(this, &Baro::measure)) {
+Baro::Baro() : readingThread(&Baro::measureLoop, this) {
+
+    measurementPeriod = 1000;
+
     fd = wiringPiI2CSetup(DEVICE_ADDRESS);
 
     if (fd <= 0) {
         log_error("Couldn't open I2C device");
-    return;
+        return;
     }
 
     for (int calibIndex = 0; calibIndex < 22; calibIndex++) {
     calibration[calibIndex] = wiringPiI2CReadReg8(fd, 0xAA + calibIndex);
-
-    readingThread.start();
     }
 }
 
 //==========================================
 
-Baro::measure() {
+void Baro::measure() {
+
     wiringPiI2CWriteReg8(fd, 0xF4, 0x2e);
 
     cxxtools::Thread::sleep(53);
@@ -64,7 +68,16 @@ Baro::measure() {
     rawTemp = (wiringPiI2CReadReg8(fd, 0xf6) << 8) + (wiringPiI2CReadReg8(fd, 0xf7) & 0xFF);
 
     cxxtools::Thread::sleep(measurementPeriod);
+}
 
+
+void Baro::measureLoop() {
+    cxxtools::Thread::sleep(53);
+
+    while (true) {
+        measure();
+        cxxtools::Thread::sleep(measurementPeriod);
+    }
 }
 
 //==========================================

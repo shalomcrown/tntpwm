@@ -2,7 +2,7 @@
 #include "baro-bmp180.hpp"
 
 int sliderValue = 0;
-volatile Baro baro;
+Baro baro;
 
 </%pre>
 

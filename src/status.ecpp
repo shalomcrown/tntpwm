@@ -11,5 +11,5 @@ int id;
 </%args>
 
 <%cpp>
-
+    reply.out() << baro.getRawTemp();
 </%cpp>

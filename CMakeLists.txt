@@ -4,10 +4,11 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/Modules/")
 
 find_package(TNTNET REQUIRED)
 find_package(WIRINGPI REQUIRED)
+find_package (Threads)
 
 add_subdirectory(src)
 add_subdirectory(Modules)
-add_definitions(-std=c++11)
+add_compile_options(-std=c++11 -pthread)
 
 
 file(GLOB HEADERS
@@ -36,7 +37,7 @@ endforeach()
 add_executable(tntpwm ${SOURCE_FILES} )
 
 target_include_directories(tntpwm PRIVATE ${TNTNET_INCLUDE_DIRS} src )
-target_link_libraries(tntpwm ${TNTNET_LIBRARIES} ${WIRINGPI_LIBRARIES})
+target_link_libraries(tntpwm ${TNTNET_LIBRARIES} ${WIRINGPI_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 
 install(TARGETS tntpwm RUNTIME DESTINATION bin)

@@ -1,7 +1,7 @@
 <%pre>
 #include "baro-bmp180.hpp"
 
-extern volatile Baro baro;
+extern Baro baro;
 
 </%pre>
 

@@ -39,13 +39,13 @@ class Baro {
         void measure();
 
         int getFd();
-        uint8_t getCalibration(int index);
+        uint16_t getCalibration(int index);
         int getCalibrationSize();
         int getRawTemp();
 
     private:
         int fd;
-        uint8_t calibration[22];
+        uint16_t calibration[22];
         std::thread readingThread;
         int rawTemp;
 

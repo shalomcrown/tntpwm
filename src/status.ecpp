@@ -7,7 +7,7 @@ extern Baro baro;
 
 
 <%args>
-String id;
+char *id;
 </%args>
 
 <%cpp>

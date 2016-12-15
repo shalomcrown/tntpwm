@@ -52,9 +52,9 @@ Baro::Baro() : readingThread(&Baro::measureLoop, this) {
         return;
     }
 
-    for (int calibIndex = 0; calibIndex < 11; calibIndex += 2) {
-        calibration[calibIndex] = (wiringPiI2CReadReg8(fd, 0xAA + calibIndex) & 0xFF) << 8
-                + (wiringPiI2CReadReg8(fd, 0xAA + calibIndex + 1) &0xFF)
+    for (int calibIndex = 0; calibIndex < 11; calibIndex++) {
+        calibration[calibIndex] = (wiringPiI2CReadReg8(fd, 0xAA + calibIndex * 2)) << 8
+                + (wiringPiI2CReadReg8(fd, 0xAA + calibIndex * 2 + 1));
     }
 }
 

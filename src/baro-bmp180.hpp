@@ -45,7 +45,7 @@ class Baro {
 
     private:
         int fd;
-        uint16_t calibration[22];
+        uint16_t calibration[11];
         std::thread readingThread;
         int rawTemp;
 

@@ -53,8 +53,8 @@ Baro::Baro() : readingThread(&Baro::measureLoop, this) {
     }
 
     for (int calibIndex = 0; calibIndex < 11; calibIndex++) {
-        calibration[calibIndex] = (wiringPiI2CReadReg8(fd, 0xAA + calibIndex * 2)) << 8
-                + (wiringPiI2CReadReg8(fd, 0xAA + calibIndex * 2 + 1));
+        calibration[calibIndex] = ((uint16_t)wiringPiI2CReadReg8(fd, 0xAA + calibIndex * 2)) << 8
+                + ((uint16_t)wiringPiI2CReadReg8(fd, 0xAA + calibIndex * 2 + 1) & 0xFF);
     }
 }
 
@@ -66,7 +66,7 @@ void Baro::measure() {
 
     cxxtools::Thread::sleep(53);
 
-    rawTemp = (wiringPiI2CReadReg8(fd, 0xf6) << 8) + (wiringPiI2CReadReg8(fd, 0xf7) & 0xFF);
+    rawTemp = ((uint16_t)wiringPiI2CReadReg8(fd, 0xf6) << 8) + ((uint16_t)wiringPiI2CReadReg8(fd, 0xf7) & 0xFF);
 
     cxxtools::Thread::sleep(measurementPeriod);
 }
@@ -91,7 +91,7 @@ uint16_t Baro::getCalibration(int index) {
     return calibration[index];
 }
 int Baro::getCalibrationSize() {
-    return sizeof(calibration);
+    return sizeof(calibration) / sizeof(uint16_t);
 }
 
 int Baro::getRawTemp() {

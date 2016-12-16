@@ -55,7 +55,7 @@ int fieldCounter;
 
 %       for (int i = 0; i < baro.getCalibrationSize(); i++)
 %       {
-            <$ baro.getCalibration(i) & 0xFF $>,
+            <$ baro.getCalibration(i) $>,
 %       }
         </p>
     </body>

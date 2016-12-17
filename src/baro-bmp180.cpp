@@ -40,6 +40,17 @@
 
 log_define("baro")
 
+
+//==========================================
+
+uint16_t readI2CShortValue(int fd, uint8_t address) {
+    uint8_t ms = wiringPiI2CReadReg8(fd, address);
+    uint8_t ls = wiringPiI2CReadReg8(fd, address + 1);
+
+    uint16_t value = (((uint16_t)ms & 0xFF) << 8) + ((uint16_t)ls & 0xFF);
+    return value;
+}
+
 //==========================================
 
 Baro::Baro() : readingThread(&Baro::measureLoop, this) {
@@ -54,9 +65,22 @@ Baro::Baro() : readingThread(&Baro::measureLoop, this) {
     }
 
     for (uint8_t calibIndex = 0; calibIndex < 11; calibIndex++) {
-        calibration[calibIndex] = ((uint16_t)wiringPiI2CReadReg8(fd, 0xAAu + calibIndex * 2)) << 8
-                + ((uint16_t)wiringPiI2CReadReg8(fd, 0xAAu + calibIndex * 2 + 1) & 0xFFu);
+        calibration[calibIndex] = readI2CShortValue(fd, 0xAA + calibIndex * 2);
     }
+
+
+        AC1 = calibration[0];
+        AC2 = calibration[1];
+        AC3 = calibration[2];
+        AC4 = calibration[3];
+        AC5 = calibration[4];
+        AC6 = calibration[5];
+
+        B1 = calibration[6];
+        B2 = calibration[7];
+        MB = calibration[8];
+        MC = calibration[9];
+        MD = calibration[10];
 }
 
 //==========================================
@@ -67,7 +91,10 @@ void Baro::measure() {
 
     cxxtools::Thread::sleep(53);
 
-    rawTemp = ((uint16_t)wiringPiI2CReadReg8(fd, 0xf6u) << 8) + ((uint16_t)wiringPiI2CReadReg8(fd, 0xf7u) & 0xFF);
+    rawTemp = readI2CShortValue(fd, 0xf6);
+
+
+
 
     cxxtools::Thread::sleep(measurementPeriod);
 }
@@ -99,3 +126,23 @@ int Baro::getRawTemp() {
     return rawTemp;
 }
 
+
+void operator<<= (cxxtools::SerializationInfo& si, const Baro& config)
+{
+  si.addMember("fd") <<= config.fd;
+  si.addMember("rawTemp") <<= config.rawTemp;
+
+
+  si.addMember("AC1") <<= config.AC1;
+  si.addMember("AC2") <<= config.AC2;
+  si.addMember("AC3") <<= config.AC3;
+  si.addMember("AC4") <<= config.AC4;
+  si.addMember("AC5") <<= config.AC5;
+  si.addMember("AC6") <<= config.AC6;
+  si.addMember("B1") <<= config.B1;
+  si.addMember("B2") <<= config.B2;
+
+  si.addMember("MB") <<= config.MB;
+  si.addMember("MC") <<= config.MC;
+  si.addMember("MD") <<= config.MD;
+}

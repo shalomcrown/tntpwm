@@ -24,6 +24,7 @@
 #include <stdint.h>
 #include <thread>
 #include <cxxtools/thread.h>
+#include <cxxtools/jsonserializer.h>
 
 #if ! defined(BARO_BMP180_INCLUDED)
 #define BARO_BMP180_INCLUDED
@@ -43,13 +44,27 @@ class Baro {
         int getCalibrationSize();
         int getRawTemp();
 
-    private:
         int fd;
         uint16_t calibration[11];
         std::thread readingThread;
         int rawTemp;
 
+        int16_t AC1;
+        int16_t AC2;
+        int16_t AC3;
+        uint16_t AC4;
+        uint16_t AC5;
+        uint16_t AC6;
+        int16_t B1;
+        int16_t B2;
+        int16_t MB;
+        int16_t MC;
+        int16_t MD;
+
         void measureLoop();
 };
+
+
+extern void operator<<= (cxxtools::SerializationInfo& si, const Baro& config);
 
 #endif // BARO_BMP180_INCLUDED

@@ -1,5 +1,6 @@
 <%pre>
 #include "baro-bmp180.hpp"
+#include <cxxtools/jsonserializer.h>
 
 extern Baro baro;
 
@@ -11,5 +12,10 @@ id;
 </%args>
 
 <%cpp>
-    reply.out() << baro.getRawTemp();
+//    reply.out() << baro.getRawTemp();
+    cxxtools::JsonSerializer serializer(reply.out());
+    serializer.beautify(true);
+    serializer.serialize(baro);
+
+
 </%cpp>

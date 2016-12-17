@@ -31,7 +31,10 @@ int fieldCounter;
             xmlhttp.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
                         // Typical action to be performed when the document is ready:
-                        document.getElementById("rawTemp").innerHTML = xmlhttp.responseText;
+                        document.getElementById("raw").innerHTML = xmlhttp.responseText;
+
+                        baroData = JSON.parse(xmlhttp.responseText);
+                        document.getElementById("temp").innerHTML = baroData.temperature + 'C';
                     }
             };
 
@@ -49,7 +52,9 @@ int fieldCounter;
         <h1>Welcome to TNTPWM</h1>
         <input type="range" min="0" max="1024" name="slider" id="slider" value="<$ sliderValue $>" onchange="sendValue();"/>
 
-        <p>Raw temperature: <span name="rawTemp" id="rawTemp">---</span> </p>
+        <p>Temperature: <span name="temp" id="temp">---</span></p>
+        <hr/>
+        <p>Raw data: <span name="raw" id="raw">---</span> </p>
 
         <p><b>Barometer Calibration values:</b><br/>
 

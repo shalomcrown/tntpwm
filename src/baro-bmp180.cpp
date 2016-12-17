@@ -96,7 +96,7 @@ void Baro::measure() {
     double x1 = (double)(rawTemp - AC6) * AC5 / 32768.0;
     double x2 = MC * 2048.0 / (x1 + MD);
     double b5 = x1 + x2;
-    temperature = (b5 + 8) / 16.0;
+    temperature = (b5 + 8) / 16.0 / 10.0;
 
     cxxtools::Thread::sleep(measurementPeriod);
 }
@@ -133,7 +133,7 @@ void operator<<= (cxxtools::SerializationInfo& si, const Baro& config)
 {
   si.addMember("fd") <<= config.fd;
   si.addMember("rawTemp") <<= config.rawTemp;
-  si.addMember("temperatrue") <<= config.temperature;
+  si.addMember("temperature") <<= config.temperature;
 
 
   si.addMember("AC1") <<= config.AC1;

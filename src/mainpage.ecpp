@@ -35,6 +35,7 @@ int fieldCounter;
 
                         baroData = JSON.parse(xmlhttp.responseText);
                         document.getElementById("temp").innerHTML = baroData.temperature + 'C';
+                        document.getElementById("press").innerHTML = baroData.pressure + 'Pa';
                     }
             };
 
@@ -53,6 +54,7 @@ int fieldCounter;
         <input type="range" min="0" max="1024" name="slider" id="slider" value="<$ sliderValue $>" onchange="sendValue();"/>
 
         <p><b>Temperature:</b> <span name="temp" id="temp">---</span></p>
+        <p><b>Pressure:</b> <span id="press">---</span>Pa</p>
         <hr/>
         <p><b>Raw data:</b> <span name="raw" id="raw">---</span> </p>
 

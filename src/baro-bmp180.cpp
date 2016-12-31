@@ -51,6 +51,19 @@ uint16_t readI2CShortValue(int fd, uint8_t address) {
     return value;
 }
 
+
+
+uint32_t readI2CLongValueThreeRegs(int fd, uint8_t address) {
+    uint8_t ms = wiringPiI2CReadReg8(fd, address);
+    uint8_t ls = wiringPiI2CReadReg8(fd, address + 1);
+    uint8_t xs = wiringPiI2CReadReg8(fd, address + 2);
+
+    uint32_t value = (((uint32_t)ms & 0xFF) << 13) + (((uint32_t)ls & 0xFF) << 5) + ((((uint32_t)xs & 0xFF) >> 3);
+    return value;
+}
+
+
+
 //==========================================
 
 Baro::Baro() : readingThread(&Baro::measureLoop, this) {
@@ -69,18 +82,18 @@ Baro::Baro() : readingThread(&Baro::measureLoop, this) {
     }
 
 
-        AC1 = calibration[0];
-        AC2 = calibration[1];
-        AC3 = calibration[2];
-        AC4 = calibration[3];
-        AC5 = calibration[4];
-        AC6 = calibration[5];
+    AC1 = calibration[0];
+    AC2 = calibration[1];
+    AC3 = calibration[2];
+    AC4 = calibration[3];
+    AC5 = calibration[4];
+    AC6 = calibration[5];
 
-        B1 = calibration[6];
-        B2 = calibration[7];
-        MB = calibration[8];
-        MC = calibration[9];
-        MD = calibration[10];
+    B1 = calibration[6];
+    B2 = calibration[7];
+    MB = calibration[8];
+    MC = calibration[9];
+    MD = calibration[10];
 }
 
 //==========================================
@@ -97,6 +110,12 @@ void Baro::measure() {
     double x2 = MC * 2048.0 / (x1 + MD);
     double b5 = x1 + x2;
     temperature = (b5 + 8) / 16.0 / 10.0;
+
+    wiringPiI2CWriteReg8(fd, 0xF4, 0x34);
+
+    cxxtools::Thread::sleep(53);
+
+    rawPressure = readI2CShortValue(fd, 0xf6); // OSS is zero, only 16 significant bits
 
     cxxtools::Thread::sleep(measurementPeriod);
 }

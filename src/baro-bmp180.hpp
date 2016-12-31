@@ -31,8 +31,8 @@
 
 class Baro {
     public:
-        double pressure;
-        double temperature;
+        double pressure; // Pa
+        double temperature; // Deg C
         int measurementPeriod;
 
 
@@ -48,6 +48,9 @@ class Baro {
         uint16_t calibration[11];
         std::thread readingThread;
         int rawTemp;
+
+        int8_t oversampling; // 0..3
+        uint32_t rawPressure;
 
         int16_t AC1;
         int16_t AC2;

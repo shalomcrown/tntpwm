@@ -41,6 +41,8 @@
 log_define("baro")
 
 
+static int baroLookupTimes[] = {5, 8, 14, 26};
+
 //==========================================
 
 uint16_t readI2CShortValue(int fd, uint8_t address) {
@@ -58,7 +60,7 @@ uint32_t readI2CLongValueThreeRegs(int fd, uint8_t address) {
     uint8_t ls = wiringPiI2CReadReg8(fd, address + 1);
     uint8_t xs = wiringPiI2CReadReg8(fd, address + 2);
 
-    uint32_t value = (((uint32_t)ms & 0xFF) << 13) + (((uint32_t)ls & 0xFF) << 5) + ((((uint32_t)xs & 0xFF) >> 3);
+    uint32_t value = (((uint32_t)ms & 0xFF) << 13) + (((uint32_t)ls & 0xFF) << 5) + ((((uint32_t)xs & 0xFF) >> 3));
     return value;
 }
 
@@ -69,6 +71,7 @@ uint32_t readI2CLongValueThreeRegs(int fd, uint8_t address) {
 Baro::Baro() : readingThread(&Baro::measureLoop, this) {
 
     measurementPeriod = 1000;
+    oversampling = 2;
 
     fd = wiringPiI2CSetup(DEVICE_ADDRESS);
 
@@ -111,11 +114,37 @@ void Baro::measure() {
     double b5 = x1 + x2;
     temperature = (b5 + 8) / 16.0 / 10.0;
 
-    wiringPiI2CWriteReg8(fd, 0xF4, 0x34);
+    oversampling = oversampling & 0x3;
 
-    cxxtools::Thread::sleep(53);
+    wiringPiI2CWriteReg8(fd, 0xF4, 0x34 | oversampling);
 
-    rawPressure = readI2CShortValue(fd, 0xf6); // OSS is zero, only 16 significant bits
+    cxxtools::Thread::sleep(baroLookupTimes[oversampling]);
+
+    rawPressure = readI2CLongValueThreeRegs(fd, 0xf6) >> (8 - oversampling);
+
+    double b6 = b5 - 4000;
+    x1 = (B2 * (b6 * b6 / 4096)) / 2048;
+    x2 = AC2 * b6 / 2048;
+    double x3 = x1 + x2;
+    double b3 = (((AC1 * 4.0 + x3) * pow(2, oversampling)) + 2) / 4.0;
+    x1 = AC3 * b6 /  8192.0;
+    x2 = (B1 * (b6 * b6 / 4096)) / 65536.;
+    x3 = ((x1 + x2) + 2.0) / 4.0;
+    double b4 = AC4 * (x3 + 32768.0) / 32768.0;
+    uint32_t b7 = ((uint32_t)(rawPressure - b3)) * (50000 >> oversampling);
+
+    double p;
+
+    if (b7 < 0X80000000) {
+        p = (b7 * 2.) / b4;
+    } else {
+        p = (b7 / b4) * 2.;
+    }
+
+    x1 = (p / 256.0) * (p / 256.);
+    x1 = (x1 * 3038) / 65536;
+    x2 = -7357 * p / 65536;
+    pressure = p + (x1 + x2 + 3791) / 16;
 
     cxxtools::Thread::sleep(measurementPeriod);
 }
@@ -153,6 +182,8 @@ void operator<<= (cxxtools::SerializationInfo& si, const Baro& config)
   si.addMember("fd") <<= config.fd;
   si.addMember("rawTemp") <<= config.rawTemp;
   si.addMember("temperature") <<= config.temperature;
+  si.addMember("pressure") <<= config.pressure;
+  si.addMember("rawPressure") <<= config.rawPressure;
 
 
   si.addMember("AC1") <<= config.AC1;

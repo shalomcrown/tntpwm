@@ -54,7 +54,7 @@ int fieldCounter;
         <input type="range" min="0" max="1024" name="slider" id="slider" value="<$ sliderValue $>" onchange="sendValue();"/>
 
         <p><b>Temperature:</b> <span name="temp" id="temp">---</span></p>
-        <p><b>Pressure:</b> <span id="press">---</span>Pa</p>
+        <p><b>Pressure:</b> <span id="press">---</span></p>
         <hr/>
         <p><b>Raw data:</b> <span name="raw" id="raw">---</span> </p>
 

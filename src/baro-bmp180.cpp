@@ -116,7 +116,7 @@ void Baro::measure() {
 
     oversampling = oversampling & 0x3;
 
-    wiringPiI2CWriteReg8(fd, 0xF4, 0x34 | oversampling);
+    wiringPiI2CWriteReg8(fd, 0xF4, 0x34 | (oversampling << 6));
 
     cxxtools::Thread::sleep(baroLookupTimes[oversampling]);
 

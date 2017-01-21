@@ -143,9 +143,9 @@ void Baro::measure() {
     //}
 
     x1 = (p / 256.0) * (p / 256.);
-    x1 = (x1 * 3038) / 65536;
-    x2 = -7357 * p / 65536;
-    pressure = p + (x1 + x2 + 3791) / 16;
+    x1 = (x1 * 3038.0) / 65536.0;
+    x2 = -7357.0 * p / 65536.0;
+    pressure = p + (x1 + x2 + 3791.0) / 16.0;
 
     cxxtools::Thread::sleep(measurementPeriod);
 }

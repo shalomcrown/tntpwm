@@ -39,7 +39,7 @@ int fieldCounter;
                     }
             };
 
-            xmlhttp.open("GET", "status?id=rawTemp", true);
+            xmlhttp.open("GET", "status?id=baro", true);
             xmlhttp.send(null);
         }
 

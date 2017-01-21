@@ -1,8 +1,13 @@
 <%pre>
 #include "baro-bmp180.hpp"
+#include "accel.hpp"
 #include <cxxtools/jsonserializer.h>
 
 extern Baro baro;
+extern Accel accel;
+
+
+
 
 </%pre>
 
@@ -12,7 +17,11 @@ id;
 </%args>
 
 <%cpp>
-    cxxtools::JsonSerializer serializer(reply.out());
-    serializer.beautify(true);
-    serializer.serialize(baro);
+    if (strcmp(id.c_str(), "baro") == 0) {
+      cxxtools::JsonSerializer serializer(reply.out());
+      serializer.beautify(true);
+      serializer.serialize(baro);
+    }
+    
+    
 </%cpp>

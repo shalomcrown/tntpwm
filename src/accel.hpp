@@ -25,6 +25,7 @@
 #include <thread>
 #include <cxxtools/thread.h>
 #include <cxxtools/jsonserializer.h>
+#include <wiringPiI2C.h>
 
 #if ! defined(ACCEL_H_INCLUDED)
 #define ACCEL_H_INCLUDED
@@ -37,10 +38,11 @@ public:
     void measureLoop();
 
     int fd;
-
+    std::thread readingThread;
+    
     double xField, yField, zField;
     double xAccel, yAccel, zAccel;
-}
+};
 
 extern void operator<<= (cxxtools::SerializationInfo& si, const Accel& config);
 

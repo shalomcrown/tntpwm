@@ -25,11 +25,14 @@
 #include <thread>
 #include <cxxtools/thread.h>
 #include <cxxtools/jsonserializer.h>
+#include <cxxtools/log.h>
+
 
 #include "accel.hpp"
 
 int8_t accelAddress = 0x1d;
 
+log_define("accumulator")
 
 Accel::Accel() {
 

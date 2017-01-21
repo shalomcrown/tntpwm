@@ -16,10 +16,11 @@ file(GLOB HEADERS
 )
 
 set(ECPP_FILES src/mainpage.ecpp src/changeValue.ecpp src/status.ecpp )
-SET(SOURCE_FILES src/main.cpp src/baro-bmp180.cpp )
+SET(SOURCE_FILES src/main.cpp src/baro-bmp180.cpp src/accel.cpp )
 
 configure_file(log.xml ${CMAKE_CURRENT_SOURCE_DIR}/log.xml COPYONLY)
 configure_file(src/baro-bmp180.hpp ${CMAKE_CURRENT_BINARY_DIR}/src/baro-bmp180.hpp COPYONLY)
+configure_file(src/accel.hpp ${CMAKE_CURRENT_BINARY_DIR}/src/accel.hpp COPYONLY)
 
 
 foreach(comp ${ECPP_FILES})

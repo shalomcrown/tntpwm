@@ -123,23 +123,24 @@ void Baro::measure() {
     rawPressure = readI2CLongValueThreeRegs(fd, 0xf6) >> (8 - oversampling);
 
     double b6 = b5 - 4000;
-    x1 = (B2 * (b6 * b6 / 4096)) / 2048;
-    x2 = AC2 * b6 / 2048;
+    x1 = (B2 * (b6 * b6 / 4096.0)) / 2048.0;
+    x2 = AC2 * b6 / 2048.0;
     double x3 = x1 + x2;
-    double b3 = (((AC1 * 4.0 + x3) * pow(2, oversampling)) + 2) / 4.0;
+    double b3 = (((AC1 * 4.0 + x3) * pow(2, oversampling)) + 2.0) / 4.0;
     x1 = AC3 * b6 /  8192.0;
-    x2 = (B1 * (b6 * b6 / 4096)) / 65536.;
+    x2 = (B1 * (b6 * b6 / 4096.0)) / 65536.;
     x3 = ((x1 + x2) + 2.0) / 4.0;
     double b4 = AC4 * (x3 + 32768.0) / 32768.0;
-    uint32_t b7 = ((uint32_t)(rawPressure - b3)) * (50000 >> oversampling);
+    double b7 = ((rawPressure - b3)) * (50000 >> oversampling);
 
     double p;
+    p = (b7 * 2.0) / b4;
 
-    if (b7 < 0X80000000) {
-        p = (b7 * 2.) / b4;
-    } else {
-        p = (b7 / b4) * 2.;
-    }
+    //if (b7 < 0X80000000) {
+    //    p = (b7 * 2.) / b4;
+    //} else {
+    //    p = (b7 / b4) * 2.;
+    //}
 
     x1 = (p / 256.0) * (p / 256.);
     x1 = (x1 * 3038) / 65536;

@@ -109,9 +109,9 @@ void Baro::measure() {
 
     rawTemp = readI2CShortValue(fd, 0xf6);
 
-    double x1 = (double)(rawTemp - AC6) * AC5 / 32768.0;
-    double x2 = MC * 2048.0 / (x1 + MD);
-    double b5 = x1 + x2;
+    int32_t x1 = (rawTemp - AC6) * AC5 / 32768;
+    int32_t x2 = MC * 2048 / (x1 + MD);
+    int32_t b5 = x1 + x2;
     temperature = (b5 + 8) / 16.0 / 10.0;
 
     oversampling = oversampling & 0x3;
@@ -122,30 +122,30 @@ void Baro::measure() {
 
     rawPressure = readI2CLongValueThreeRegs(fd, 0xf6) >> (8 - oversampling);
 
-    double b6 = b5 - 4000;
-    x1 = (B2 * (b6 * b6 / 4096.0)) / 2048.0;
-    x2 = AC2 * b6 / 2048.0;
-    double x3 = x1 + x2;
-    double b3 = (((AC1 * 4.0 + x3) * pow(2, oversampling)) + 2.0) / 4.0;
-    x1 = AC3 * b6 /  8192.0;
-    x2 = (B1 * (b6 * b6 / 4096.0)) / 65536.;
-    x3 = ((x1 + x2) + 2.0) / 4.0;
-    double b4 = AC4 * (x3 + 32768.0) / 32768.0;
-    double b7 = ((rawPressure - b3)) * (50000 >> oversampling);
+    int32_t b6 = b5 - 4000;
+    x1 = (B2 * (b6 * b6 / 4096)) / 2048;
+    x2 = AC2 * b6 / 2048;
+    int32_t x3 = x1 + x2;
+    int32_t b3 = (((AC1 * 4 + x3) * (1 << oversampling)) + 2) / 4;
+    x1 = AC3 * b6 /  8192;
+    x2 = (B1 * (b6 * b6 / 4096)) / 65536;
+    x3 = ((x1 + x2) + 2) / 4;
+    int32_t b4 = AC4 * (x3 + 32768) / 32768;
+    uint32_t b7 = ((rawPressure - b3)) * (50000 >> oversampling);
 
-    double p;
-    p = (b7 * 2.0) / b4;
+    int32_t p;
+    p = (b7 * 2) / b4;
 
-    //if (b7 < 0X80000000) {
-    //    p = (b7 * 2.) / b4;
-    //} else {
-    //    p = (b7 / b4) * 2.;
-    //}
+    if (b7 < 0X80000000) {
+       p = (b7 * 2) / b4;
+    } else {
+       p = (b7 / b4) * 2;
+    }
 
-    x1 = (p / 256.0) * (p / 256.);
-    x1 = (x1 * 3038.0) / 65536.0;
-    x2 = -7357.0 * p / 65536.0;
-    pressure = p + (x1 + x2 + 3791.0) / 16.0;
+    x1 = (p / 256) * (p / 256);
+    x1 = (x1 * 3038) / 65536;
+    x2 = -7357 * p / 65536;
+    pressure = p + (x1 + x2 + 3791) / 16;
 
     cxxtools::Thread::sleep(measurementPeriod);
 }

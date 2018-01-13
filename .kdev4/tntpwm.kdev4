@@ -2,7 +2,7 @@
 BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x0c\x00t\x00n\x00t\x00p\x00w\x00m)
 
 [CMake]
-Build Directory Count=2
+Build Directory Count=3
 Current Build Directory Index=1
 ProjectRootRelative=./
 
@@ -21,6 +21,14 @@ CMake Binary=file:///usr/bin/cmake
 Environment Profile=
 Extra Arguments=
 Install Directory=file:///usr/local
+
+[CMake][CMake Build Directory 2]
+Build Directory Path=file:///home/pi/workspace/tntpwm/build
+Build Type=Debug
+CMake Binary=file:///usr/bin/cmake
+Environment Profile=
+Extra Arguments=
+Install Directory=
 
 [Defines And Includes][Compiler]
 Name=GCC

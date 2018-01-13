@@ -1,7 +1,4 @@
-build
-tntpwm
 *.ecpp.cpp
 CMakeCache.txt
 cmake_install.cmake
 Makefile
-CMakeFiles
